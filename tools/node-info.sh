@@ -19,15 +19,15 @@
 #  Contact: cryi@tutanota.com
 
 BASEDIR=$(dirname "$0")
-container=$(docker-compose -f $BASEDIR/../docker-compose.yml ps -q mn 2> /dev/null)
+container=$(docker-compose -f "$BASEDIR/../docker-compose.yml" ps -q mn 2> /dev/null)
 STATUS="NOT RUNNING"
 if [ -z "$container" ]; then 
-    printf "STATUS: $STATUS\n"
+    printf "STATUS: %s\n" "$STATUS"
     exit
 fi
-docker exec $container /home/etho/get-node-info.sh
+docker exec "$container" /home/etho/get-node-info.sh
 STATUS=$(docker ps --filter "id=$container" --format "{{.Status}}" --no-trunc 2> /dev/null)
 if [ -z "$STATUS" ]; then
     STATUS="NOT RUNNING"
 fi
-printf "STATUS: $STATUS\n"
+printf "STATUS: %s\n" "$STATUS"

@@ -18,8 +18,6 @@
 #
 #  Contact: cryi@tutanota.com
 
-platform=$(uname -m)
-
 ver=$(curl -L -s https://api.ether1.org/mn/versions.json | jq '.sn.stable' --raw-output)
 
 curl -L "https://ether1.org/releases/Ether1-MN-SN-$ver.tar.gz" -o ./geth-etho.tar.gz
