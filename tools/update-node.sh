@@ -21,7 +21,7 @@
 PATH_TO_SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$PATH_TO_SCRIPT")
 
-container=$(docker-compose -f "$BASEDIR/docker-compose.yml" ps -q mn)
+container=$(docker-compose -f "$BASEDIR/../docker-compose.yml" ps -q mn)
 if [ -z "$container" ]; then 
     # masternode is not running
     exit 1
@@ -32,10 +32,10 @@ current_ver=$(sh "$BASEDIR/node-info.sh")
 if echo "$current_ver" | grep -q "VERSION: $ver"; then
     exit 0
 else
-    docker-compose -f "$BASEDIR/docker-compose.yml" build --no-cache && docker-compose -f "$BASEDIR/docker-compose.yml" up -d --force-recreate
+    docker-compose -f "$BASEDIR/../docker-compose.yml" build --no-cache && docker-compose -f "$BASEDIR/../docker-compose.yml" up -d --force-recreate
     sleep 10
     current_ver=$(sh "$BASEDIR/node-info.sh")
-    if echo "$current_ver" | grep -q "VERSION: $ver" "$BASEDIR/data/node.info"; then
+    if echo "$current_ver" | grep -q "VERSION: $ver" "$BASEDIR/../data/node.info"; then
         exit 0
     else 
         # failed to update masternode
