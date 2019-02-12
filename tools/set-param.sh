@@ -18,32 +18,18 @@
 #
 #  Contact: cryi@tutanota.com
 
-ver=$(curl -L -s https://api.ether1.org/mn/versions.json | jq '.sn.stable' --raw-output)
-                                      
-URL="https://ether1.org/releases/Ether1-MN-SN-$ver.tar.gz"                         
+BASEDIR=$(dirname "$0")
 
-if [ -f "./limits.conf" ]; then 
-    if grep "NODE_BINARY=" "./limits.conf"; then 
-        NODE_BINARY=$(grep "NODE_BINARY=" "./limits.conf" | sed 's/NODE_BINARY=//g')
-        if [ -n "$NODE_BINARY" ] && [ ! "$NODE_BINARY" = "auto" ]; then
-            URL=$NODE_BINARY
+PARAM=$(echo "$1" | sed "s/=.*//")
+VALUE=$(echo "$1" | sed "s/[^>]*=//")
+
+case $PARAM in
+    NODE_VERSION) 
+        if grep "NODE_VERSION=" "$BASEDIR/../container/limits.conf"; then
+            TEMP=$(sed "s/NODE_VERSION=.*/NODE_VERSION=$VALUE/g" "$BASEDIR/../container/limits.conf")
+            printf "%s" "$TEMP" > "$BASEDIR/../container/limits.conf"
+        else 
+            printf "NODE_VERSION=%s" "$VALUE" >> "$BASEDIR/../container/limits.conf"
         fi
-    fi
-fi
-
-FILE=geth-etho
-
-case "$URL" in
-    *.tar.gz) 
-        curl -L "$URL" -o "./$FILE.tar.gz"
-        tar -xzvf "./$FILE.tar.gz"
-        rm -f "./$FILE.tar.gz"
-    ;;
-    *.zip)
-        curl -L "$URL" -o "./$FILE.zip"
-        unzip "./$FILE.zip"
-        rm -f "./$FILE.zip"
     ;;
 esac
-
-cp -f "$(find . -name geth)" .

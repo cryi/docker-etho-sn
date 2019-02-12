@@ -41,6 +41,7 @@ WORKDIR /home/etho/
 COPY get-geth.sh ./get-geth.sh
 COPY get-node-info.sh ./get-node-info.sh
 COPY get-version.sh ./get-version.sh
+COPY limits.conf ./limits.conf
 
 # set execution rights
 RUN chmod +x ./get-geth.sh ./get-node-info.sh ./get-version.sh
